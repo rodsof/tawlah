@@ -7,10 +7,14 @@ import {
   makeStyles,
   fade,
   Typography,
+  Button,
 } from "@material-ui/core";
 import RestaurantList from "../src/components/RestaurantList";
 import AddIcon from "@material-ui/icons/Add";
 import Layout from "../src/components/Layout";
+import { FirebaseContext } from "../firebase";
+import { useContext } from "react";
+import Router from 'next/router';
 
 const useStyles = makeStyles((theme) => ({
   box: {
@@ -31,12 +35,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: fade(theme.palette.common.black, 0.10),
   },
   addIconButton: {
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.primary.white,
-    "&:hover": {
-      backgroundColor: fade(theme.palette.common.black, 0.10),
-      color: theme.palette.primary.main
-    },
+    borderRadius: theme.spacing(8),
     padding: theme.spacing(2,2),
     marginTop: theme.spacing(2)
   },
@@ -47,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 const Index = () => {
   const classes = useStyles();
-
+  const {user, firebase} = useContext(FirebaseContext)
   return (
     <Layout>
    <div className={classes.titleSection}>
@@ -66,12 +65,14 @@ const Index = () => {
       <Typography color="textPrimary" variant="h5">
           Add your restaurant to the site!
         </Typography>
-        <IconButton
-          aria-label="add"
+        <Button
+          color="primary"
+          variant="contained"
           className={classes.addIconButton}
+          onClick={ () => user ? Router.push('/new-restaurant') : Router.push('/signin')}
         >
           <AddIcon className={classes.addIcon} />
-        </IconButton>
+        </Button>
       </Box> 
       </Layout>
   

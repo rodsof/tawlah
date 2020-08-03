@@ -1,0 +1,346 @@
+import React, { useState, useContext } from "react";
+import Button from "@material-ui/core/Button";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import TextField from "@material-ui/core/TextField";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import Link from "@material-ui/core/Link";
+import Grid from "@material-ui/core/Grid";
+import Box from "@material-ui/core/Box";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
+import Layout from "../src/components/Layout";
+import Copyright from "../src/components/Copyright";
+import { FirebaseContext } from "../firebase";
+import Alert from "@material-ui/lab/Alert";
+import FileUploader from "react-firebase-file-uploader";
+import AddPhotoAlternateIcon from "@material-ui/icons/AddPhotoAlternate";
+import QRCode from "qrcode";
+
+// validations
+import useValidation from "../hooks/useValidation";
+import validateNewRestaurant from "../validation/validateNewRestaurant";
+import { useRouter } from "next/router";
+import { Snackbar } from "@material-ui/core";
+
+const STATE_INICIAL = {
+  name: "",
+  description: "",
+  image: "",
+  street_address: "",
+  city: "",
+  state: "",
+  zip_code: "",
+};
+
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    marginTop: theme.spacing(8),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  form: {
+    width: "100%", // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
+  },
+  textArea: {
+    marginBottom: "2rem",
+    display: "flex",
+    alignItems: "center",
+    flexGrow: 1,
+    padding: "1rem",
+    height: theme.spacing(14),
+    width: "100%",
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+  canva: {
+    marginBottom: "10rem",
+    padding: "1rem",
+    height: theme.spacing(22),
+    width: "100%",
+  }
+}));
+
+const SignIn = () => {
+  const classes = useStyles();
+
+  // state de las imagenes
+  const [imagename, saveName] = useState("");
+  const [uploading, saveUploading] = useState(false);
+  const [progress, saveProgress] = useState(0);
+  const [imageurl, saveImageUrl] = useState("");
+  const [error, saveError] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  /*   const [street_address, saveStreetAddress] = useState("");
+  const [city, saveCity] = useState("");
+  const [state, saveState] = useState("");
+  const [zip_code, saveZipCode] = useState("");
+  const [googleMapLink, saveGoogleMapLink] = useState("");
+    let autocomplete = null; */
+  const {
+    values,
+    errors,
+    handleSubmit,
+    handleChange,
+    handleBlur,
+  } = useValidation(STATE_INICIAL, validateNewRestaurant, createRestaurant);
+
+  const {
+    name,
+    description,
+    image,
+    city,
+    street_address,
+    state,
+    zip_code,
+  } = values;
+
+  // hook routing
+  const router = useRouter();
+
+  // context crud firebase
+  const { user, firebase } = useContext(FirebaseContext);
+  /* 
+  useEffect(() => {
+    // code to run on component mount
+    autocomplete = new google.maps.places.Autocomplete(document.getElementById('autocomplete'), {})
+    autocomplete.addListener("place_changed", handlePlaceSelect)
+  }, []) */
+
+  const generateQR = (url) => {
+    setOpen(true);
+    QRCode.toCanvas(document.getElementById("canvas"), url, function (error) {
+      if (error) console.error(error);
+    });
+   
+  };
+
+  async function createRestaurant() {
+    let url = "";
+    // it's necessary to be logged in
+    if (!user) {
+      return router.push("/login");
+    }
+
+    // create object
+    const restaurant = {
+      name,
+      imageurl,
+      description,
+      votes: 0,
+      comments: [],
+      created: Date.now(),
+      creator: {
+        id: user.uid,
+        name: user.displayName,
+      },
+      hasVoted: [],
+      street_address,
+      city,
+      state,
+      zip_code,
+    };
+
+    // insert into db
+    firebase.db
+      .collection("restaurants")
+      .add(restaurant)
+      .then(function (docRef) {
+        saveError(false);
+        url = "/restaurants/" + docRef.id;
+        // generate qr
+        generateQR(url);
+      })
+      .catch(function (error) {
+        saveError("Error creating the restaurant, try again");
+      });
+  }
+
+  const handleUploadStart = () => {
+    saveProgress(0);
+    saveUploading(true);
+  };
+
+  const handleProgress = (progress) => saveProgress({ progress });
+
+  const handleUploadError = (error) => {
+    saveUploading(error);
+    console.error(error);
+  };
+
+  const handleUploadSuccess = (name) => {
+    saveProgress(100);
+    saveUploading(false);
+    saveName(name);
+    firebase.storage
+      .ref("restaurants")
+      .child(name)
+      .getDownloadURL()
+      .then((url) => {
+        saveImageUrl(url);
+      });
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+  /* 
+  const handlePlaceSelect = () => {
+    let addressObject = autocomplete.getPlace();
+    let address = addressObject.address_components;
+    saveStreetAddress(`${address[0].long_name} ${address[1].long_name}`);
+    saveCity(address[4].long_name);
+    saveState(address[6].short_name);
+    saveZipCode(address[8].short_name);
+    saveGoogleMapLink(addressObject.url);
+  }; */
+
+  return (
+    <Layout>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Typography component="h1" variant="h5">
+            Add your Restaurant
+          </Typography>
+          <form className={classes.form} onSubmit={handleSubmit} noValidate>
+            <label htmlFor="name">Name</label>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              label="Your restaurant's name"
+              id="name"
+              name="name"
+              value={name}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              autoComplete="name"
+              autoFocus
+            />
+            {errors.name && <Alert severity="error">{errors.name}</Alert>}
+
+            <label htmlFor="description">Description</label>
+            <textarea
+              label="Description"
+              type="description"
+              id="description"
+              name="description"
+              className={classes.textArea}
+              value={description}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            {errors.description && (
+              <Alert severity="error">{errors.description}</Alert>
+            )}
+
+            <div>
+              <label htmlFor="image">
+                Image <br />
+              </label>
+              <FileUploader
+                accept="image/*"
+                id="image"
+                name="image"
+                randomizeFilename
+                storageRef={firebase.storage.ref("restaurants")}
+                onUploadStart={handleUploadStart}
+                onUploadError={handleUploadError}
+                onUploadSuccess={handleUploadSuccess}
+                onProgress={handleProgress}
+              />
+            </div>
+
+            <div>
+              Location
+              {/* <input
+                id="autocomplete"
+                className="input-field"
+                type="text"
+              /> */}
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                name="city"
+                value={city}
+                label="City"
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              {errors.city && <Alert severity="error">{errors.city}</Alert>}
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                name="street_address"
+                value={street_address}
+                label="Street Address"
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              {errors.street_address && (
+                <Alert severity="error">{errors.street_address}</Alert>
+              )}
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                name="state"
+                value={state}
+                label={"State"}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                name="zip_code"
+                value={zip_code}
+                label="Zipcode"
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              {errors.zip_code && (
+                <Alert severity="error">{errors.zip_code}</Alert>
+              )}
+            </div>
+
+            {error && <Alert severity="error">{error} </Alert>}
+
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              Add your restaurant to Tawlah
+            </Button>
+          </form>
+          <Snackbar open={open} autoHideDuration={12000} onClose={handleClose}>
+            <canvas className={classes.canva} id="canvas" />
+          </Snackbar>
+        </div>
+      </Container>
+    </Layout>
+  );
+};
+
+export default SignIn;

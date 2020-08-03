@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -14,7 +14,8 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
-import { Icon, Avatar, Button } from "@material-ui/core";
+import { Avatar, Button } from "@material-ui/core";
+import { FirebaseContext } from "../../firebase";
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -52,11 +53,10 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-
   },
   inputRoot: {
     color: fade(theme.palette.common.black, 0.75),
-    paddingLeft: theme.spacing(2)
+    paddingLeft: theme.spacing(2),
   },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 0),
@@ -76,8 +76,9 @@ const useStyles = makeStyles((theme) => ({
   },
   sectionMobile: {
     display: "none",
-    [theme.breakpoints.down(959)]: { // because it includes md and md is 960
-        display: "flex",
+    [theme.breakpoints.down(959)]: {
+      // because it includes md and md is 960
+      display: "flex",
     },
   },
   large: {
@@ -86,13 +87,18 @@ const useStyles = makeStyles((theme) => ({
   },
   logoButton: {
     "&:hover": {
-        backgroundColor: theme.palette.primary.white
-      }
+      backgroundColor: theme.palette.primary.white,
+    },
+  },
+  authButton: {
+    margin: theme.spacing(1),
+    
   }
 }));
 
-export default function Header  ()  {
+const Header = () => {
   const classes = useStyles();
+  const { user, firebase } = useContext(FirebaseContext);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -128,6 +134,10 @@ export default function Header  ()  {
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={() => { 
+        firebase.logOut() 
+        handleMenuClose()
+        }}>Logout</MenuItem>
     </Menu>
   );
 
@@ -173,68 +183,96 @@ export default function Header  ()  {
 
   return (
     <React.Fragment>
-    <div className={classes.grow}>
-      <AppBar position="static" color="transparent">
-        <Toolbar>
-          <Button className={classes.logoButton} href="/">
-              <Avatar className={classes.large}  src="/logo.jpg" alt="Logo"></Avatar>
-        </Button>
+      <div className={classes.grow}>
+        <AppBar position="static" color="inherit">
+          <Toolbar>
+            <Button className={classes.logoButton} href="/">
+              <Avatar
+                className={classes.large}
+                src="/logo.jpg"
+                alt="Logo"
+              ></Avatar>
+            </Button>
 
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
+            <div className={classes.search}>
+              <div className={classes.searchIcon}>
                 <IconButton>
-                <SearchIcon />
+                  <SearchIcon />
                 </IconButton>
-              
+              </div>
+              <InputBase
+                placeholder="Search…"
+                classes={{
+                  root: classes.inputRoot,
+                  input: classes.inputInput,
+                }}
+                inputProps={{ "aria-label": "search" }}
+              />
             </div>
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ "aria-label": "search" }}
-            />
-          </div>
-          <div className={classes.grow} />
-          <div className={classes.sectionDesktop}>
-            <IconButton aria-label="show 4 new mails">
-              <Badge badgeContent={4} color="secondary">
-                <MailIcon />
-              </Badge>
-            </IconButton>
-            <IconButton aria-label="show 17 new notifications">
-              <Badge badgeContent={17} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-            >
-              <AccountCircle />
-            </IconButton>
-          </div>
-          <div className={classes.sectionMobile}>
-            <IconButton
-              aria-label="show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
-            >
-              <MoreIcon />
-            </IconButton>
-          </div>
-        </Toolbar>
-      </AppBar>
-      {renderMobileMenu}
-      {renderMenu}
-    </div> 
+            <div className={classes.grow} /> {/* idk */}
+            {user ? (
+              <>
+                <div className={classes.sectionDesktop}>
+                  <IconButton aria-label="show 4 new mails">
+                    <Badge badgeContent={4} color="secondary">
+                      <MailIcon />
+                    </Badge>
+                  </IconButton>
+                  <IconButton aria-label="show 17 new notifications">
+                    <Badge badgeContent={17} color="secondary">
+                      <NotificationsIcon />
+                    </Badge>
+                  </IconButton>
+                  <IconButton
+                    edge="end"
+                    aria-label="account of current user"
+                    aria-controls={menuId}
+                    aria-haspopup="true"
+                    onClick={handleProfileMenuOpen}
+                  >
+                    <AccountCircle />
+                  </IconButton>
+                </div>
+                <div className={classes.sectionMobile}>
+                  <IconButton
+                    aria-label="show more"
+                    aria-controls={mobileMenuId}
+                    aria-haspopup="true"
+                    onClick={handleMobileMenuOpen}
+                  >
+                    <MoreIcon />
+                  </IconButton>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className={classes.sectionDesktop}>
+                  <Button 
+                  color="primary"
+                  className={classes.authButton}
+                  variant="contained"
+                  href="/signin"
+                  >
+                    Sign In
+                  </Button>
+                  <Button 
+                  color="primary" 
+                  className={classes.authButton}
+                  variant="contained"
+                  href="/signup"
+                  >
+                    Sign Up
+                  </Button>
+                </div>
+              </>
+            )}
+          </Toolbar>
+        </AppBar>
+        {renderMobileMenu}
+        {renderMenu}
+      </div>
     </React.Fragment>
   );
 };
 
-
+export default Header;

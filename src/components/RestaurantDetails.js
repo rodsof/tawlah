@@ -78,22 +78,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const RestaurantDetails = ({image}) => {
+const RestaurantDetails = ({restaurant}) => {
   const classes = useStyles();
   return (
     <ButtonBase
           focusRipple
-          key={image.title}
+          key={restaurant.name}
           className={classes.image}
           focusVisibleClassName={classes.focusVisible}
           style={{
-            width: image.width,
+            width: "100%"
           }}
         >
           <span
             className={classes.imageSrc}
             style={{
-              backgroundImage: `url(${image.url})`,
+              backgroundImage: `url(${restaurant.imageurl})`,
             }}
           />
           <span className={classes.imageBackdrop} />
@@ -104,7 +104,7 @@ const RestaurantDetails = ({image}) => {
               color="inherit"
               className={classes.imageTitle}
             >
-              {image.title}
+              {restaurant.name}
               <span className={classes.imageMarked} />
             </Typography>
           </span>
