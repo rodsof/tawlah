@@ -9,12 +9,30 @@ const restaurants = [
   { id: "4", name: "name4" },
 ];
 
+const images = [
+  {
+    url: '/static/pizza.jpg',
+    title: 'Breakfast',
+    width: '100%',
+  },
+  {
+    url: '/static/burger.jpg',
+    title: 'Burgers',
+    width: '100%',
+  },
+  {
+    url: '/static/pizza.jpg',
+    title: 'Camera',
+    width: '100%',
+  },
+];
+
 const RestaurantList = () => {
   return (
     <>
-      {restaurants.map((restaurant) => (
-        <Grid item xs={12} md={4} key={restaurant.id}>
-          <RestaurantDetails  restaurant={restaurant} />
+      {images.map((image) => (
+        <Grid item xs={12} md={4} key={image.url}>
+          <RestaurantDetails  image={image} />
         </Grid>
       ))}
     </>
