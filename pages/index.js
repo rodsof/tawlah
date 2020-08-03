@@ -1,65 +1,80 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import {
+  Grid,
+  IconButton,
+  Divider,
+  Container,
+  Box,
+  makeStyles,
+  fade,
+  Typography,
+} from "@material-ui/core";
+import RestaurantList from "../components/RestaurantList";
+import AddIcon from "@material-ui/icons/Add";
+import Layout from "../components/Layout";
 
-export default function Home() {
+const useStyles = makeStyles((theme) => ({
+  box: {
+    marginTop: theme.spacing(4),
+    width: "100%",
+    textAlign: "center",
+    justifyContent: "center",
+  },
+  titleSection: {
+    margin: theme.spacing(3, 2),
+    textAlign: "center",
+    justifyContent: "center",
+
+  },
+  restaurantsSection: {
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
+    backgroundColor: fade(theme.palette.common.black, 0.10),
+  },
+  addIconButton: {
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.primary.white,
+    "&:hover": {
+      backgroundColor: fade(theme.palette.common.black, 0.10),
+      color: theme.palette.primary.main
+    },
+    padding: theme.spacing(2,2),
+    marginTop: theme.spacing(2)
+  },
+  addIcon: {
+    width: "3em",
+    height: "3em",
+  },
+}));
+const Index = () => {
+  const classes = useStyles();
+
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+    <Layout>
+   <div className={classes.titleSection}>
+       <Typography color="textPrimary" variant="h2">
+          Browse restaurants: 
+        </Typography>
+      </div>
+      <Divider variant="middle" />
+      <div className={classes.restaurantsSection} >
+      <Grid container spacing={4}>
+        <RestaurantList />
+      </Grid>
+      </div>
+      <Divider variant="middle" />
+      <Box className={classes.box}>
+      <Typography color="textPrimary" variant="h5">
+          Add your restaurant to the site!
+        </Typography>
+        <IconButton
+          aria-label="add"
+          className={classes.addIconButton}
         >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
-  )
+          <AddIcon className={classes.addIcon} />
+        </IconButton>
+      </Box> 
+      </Layout>
+  
+  );
 }
+export default Index;
