@@ -80,7 +80,6 @@ const useStyles = makeStyles((theme) => ({
 
 const RestaurantDetails = ({image}) => {
   const classes = useStyles();
-console.log(image.url);
   return (
     <ButtonBase
           focusRipple

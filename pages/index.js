@@ -8,9 +8,9 @@ import {
   fade,
   Typography,
 } from "@material-ui/core";
-import RestaurantList from "../components/RestaurantList";
+import RestaurantList from "../src/components/RestaurantList";
 import AddIcon from "@material-ui/icons/Add";
-import Layout from "../components/Layout";
+import Layout from "../src/components/Layout";
 
 const useStyles = makeStyles((theme) => ({
   box: {

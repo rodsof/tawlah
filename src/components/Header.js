@@ -81,7 +81,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   large: {
-    width: theme.spacing(12),
+    width: theme.spacing(16),
     height: theme.spacing(12),
   },
   logoButton: {
