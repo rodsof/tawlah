@@ -144,6 +144,7 @@ const SignIn = () => {
       city,
       state,
       zip_code,
+      active: true
     };
 
     // insert into db
