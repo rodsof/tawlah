@@ -51,7 +51,7 @@ const Index = () => {
     <Layout>
    <div className={classes.titleSection}>
        <Typography color="textPrimary" variant="h2">
-          Browse restaurants: 
+          Most Popular Restaurants 
         </Typography>
       </div>
       <Divider variant="middle" />

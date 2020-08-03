@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
     padding: "1rem",
     height: theme.spacing(22),
     width: "100%",
-  }
+  },
 }));
 
 const SignIn = () => {
@@ -117,7 +117,7 @@ const SignIn = () => {
     QRCode.toCanvas(document.getElementById("canvas"), url, function (error) {
       if (error) console.error(error);
     });
-   
+
   };
 
   async function createRestaurant() {
@@ -324,19 +324,26 @@ const SignIn = () => {
 
             {error && <Alert severity="error">{error} </Alert>}
 
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-            >
-              Add your restaurant to Tawlah
-            </Button>
+            {open ? (
+              <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                Created!
+              <Alert severity="success" Close={handleClose}>
+                SCAN TO GET YOUR RESTAURANT URL
+                <canvas id="canvas" />
+              </Alert>
+              </Snackbar>
+            ) : (
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+              >
+                Add your restaurant to Tawlah
+              </Button>
+            )}
           </form>
-          <Snackbar open={open} autoHideDuration={12000} onClose={handleClose}>
-            <canvas className={classes.canva} id="canvas" />
-          </Snackbar>
         </div>
       </Container>
     </Layout>
