@@ -86,6 +86,7 @@ const RestaurantDetails = ({restaurant}) => {
           key={restaurant.name}
           className={classes.image}
           focusVisibleClassName={classes.focusVisible}
+          href={`/restaurants/${restaurant.id}`}
           style={{
             width: "100%"
           }}
