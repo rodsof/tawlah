@@ -7,7 +7,8 @@ import firebase, { FirebaseContext } from "../firebase";
 import useAuth from "../hooks/useAuth";
 
 export default function MyApp(props) {
-  const user = useAuth();
+  const { user } = useAuth();
+  
   const { Component, pageProps } = props;
 
   React.useEffect(() => {
@@ -17,7 +18,6 @@ export default function MyApp(props) {
       jssStyles.parentElement.removeChild(jssStyles);
     }
   }, []);
-
   return (
       <ThemeProvider theme={theme}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}

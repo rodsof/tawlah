@@ -9,13 +9,13 @@ import Badge from "@material-ui/core/Badge";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import MenuIcon from "@material-ui/icons/Menu";
-import SearchIcon from "@material-ui/icons/Search";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import { Avatar, Button } from "@material-ui/core";
 import { FirebaseContext } from "../../firebase";
+import Search from "./Search";
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -178,6 +178,10 @@ const Header = () => {
         </IconButton>
         <p>Profile</p>
       </MenuItem>
+      <MenuItem onClick={() => { 
+        firebase.logOut() 
+        handleMenuClose()
+        }}>Logout</MenuItem>
     </Menu>
   );
 
@@ -194,21 +198,7 @@ const Header = () => {
               ></Avatar>
             </Button>
 
-            <div className={classes.search}>
-              <div className={classes.searchIcon}>
-                <IconButton>
-                  <SearchIcon />
-                </IconButton>
-              </div>
-              <InputBase
-                placeholder="Search…"
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput,
-                }}
-                inputProps={{ "aria-label": "search" }}
-              />
-            </div>
+            <Search />
             <div className={classes.grow} /> {/* idk */}
             {user ? (
               <>
@@ -246,7 +236,7 @@ const Header = () => {
               </>
             ) : (
               <>
-                <div className={classes.sectionDesktop}>
+                <div >
                   <Button 
                   color="primary"
                   className={classes.authButton}
@@ -264,6 +254,7 @@ const Header = () => {
                     Sign Up
                   </Button>
                 </div>
+
               </>
             )}
           </Toolbar>

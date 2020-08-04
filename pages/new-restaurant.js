@@ -2,11 +2,7 @@ import React, { useState, useContext } from "react";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import Link from "@material-ui/core/Link";
-import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
+
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
@@ -15,7 +11,6 @@ import Copyright from "../src/components/Copyright";
 import { FirebaseContext } from "../firebase";
 import Alert from "@material-ui/lab/Alert";
 import FileUploader from "react-firebase-file-uploader";
-import AddPhotoAlternateIcon from "@material-ui/icons/AddPhotoAlternate";
 import QRCode from "qrcode";
 
 // validations
@@ -31,7 +26,7 @@ const STATE_INICIAL = {
   street_address: "",
   city: "",
   state: "",
-  zip_code: "",
+  zip_code: ""
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -114,12 +109,12 @@ const SignIn = () => {
 
   const generateQR = (url) => {
     setOpen(true);
+
     QRCode.toCanvas(document.getElementById("canvas"), url, function (error) {
       if (error) console.error(error);
     });
 
   };
-
   async function createRestaurant() {
     let url = "";
     // it's necessary to be logged in
@@ -191,7 +186,6 @@ const SignIn = () => {
     if (reason === "clickaway") {
       return;
     }
-
     setOpen(false);
   };
   /* 
@@ -326,11 +320,10 @@ const SignIn = () => {
             {error && <Alert severity="error">{error} </Alert>}
 
             {open ? (
-              <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-                Created!
-              <Alert severity="success" Close={handleClose}>
+              <Snackbar open={open} autoHideDuration={24000} onClose={handleClose}>
+              <Alert severity="success" >
+              <canvas id="canvas" />
                 SCAN TO GET YOUR RESTAURANT URL
-                <canvas id="canvas" />
               </Alert>
               </Snackbar>
             ) : (

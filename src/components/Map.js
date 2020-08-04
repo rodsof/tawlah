@@ -1,11 +1,14 @@
+
 import React from "react";
 
 const Map = ({street_address, city, state}) => {
-  console.log(city);
+  city = city.replace(' ','+');
+  street_address = street_address.replace(' ','+');
+  state = state.replace(' ','+');
   return (
     <iframe
-    style={{width: '100%', height: '500px'}}
-      src = "https://www.google.com/maps/embed/v1/place?key=AIzaSyDFfsSlkxl1DI0ztyZDRhOPKmIUhK1SuCw&q=City+Hall,New+York,NY"
+    style={{width: '70%', height: '400px'}}
+      src = {"https://www.google.com/maps/embed/v1/place?key="+process.env.API_KEY+"&q="+street_address+','+city+','+state}
     ></iframe>
   );
 };
