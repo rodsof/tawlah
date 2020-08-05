@@ -1,12 +1,13 @@
 import { Grid, Divider, makeStyles, fade, Typography } from "@material-ui/core";
 import RestaurantList from "../src/components/RestaurantList";
 import AddIcon from "@material-ui/icons/Add";
-import Layout from "../src/components/Layout";
-import { FirebaseContext } from "../firebase";
-import { useContext } from "react";
-import Router from "next/router";
+import Layout from "../src/components/Layout/Layout";
+
 import useRestaurants from "../hooks/useRestaurants";
 import UserMenu from "../src/components/UserMessage";
+import MyRestaurants from "../src/components/Owner/MyRestaurants";
+import { FirebaseContext } from "../firebase";
+import { useContext } from "react";
 
 const useStyles = makeStyles((theme) => ({
   box: {
@@ -38,8 +39,9 @@ const useStyles = makeStyles((theme) => ({
 const Index = () => {
   const classes = useStyles();
   const { restaurants, spinner, error } = useRestaurants("votes");
+ const { user } = useContext(FirebaseContext);
 
-  return (
+ return (
     <Layout>
       <div className={classes.titleSection}>
         <Typography color="textPrimary" variant="h2">
@@ -58,6 +60,16 @@ const Index = () => {
       </div>
       <Divider variant="middle" />
       <UserMenu />
+      <Divider variant="middle" />
+      { user ? 
+      <Grid container spacing={4} >
+      <MyRestaurants 
+       restaurants={restaurants}
+       spinner={spinner}
+       error={error}
+      />
+      </Grid>
+      : null }
     </Layout>
   );
 };

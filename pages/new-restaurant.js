@@ -6,8 +6,8 @@ import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import Layout from "../src/components/Layout";
-import Copyright from "../src/components/Copyright";
+import Layout from "../src/components/Layout/Layout";
+import Copyright from "../src/components/Layout/Copyright";
 import { FirebaseContext } from "../firebase";
 import Alert from "@material-ui/lab/Alert";
 import FileUploader from "react-firebase-file-uploader";
@@ -71,12 +71,7 @@ const SignIn = () => {
   const [error, saveError] = useState(false);
   const [open, setOpen] = useState(false);
 
-  /*   const [street_address, saveStreetAddress] = useState("");
-  const [city, saveCity] = useState("");
-  const [state, saveState] = useState("");
-  const [zip_code, saveZipCode] = useState("");
-  const [googleMapLink, saveGoogleMapLink] = useState("");
-    let autocomplete = null; */
+ 
   const {
     values,
     errors,
@@ -130,7 +125,7 @@ const SignIn = () => {
       votes: 0,
       comments: [],
       created: Date.now(),
-      creator: {
+      owner: {
         id: user.uid,
         name: user.displayName,
       },

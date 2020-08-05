@@ -7,10 +7,9 @@ import {
   Typography,
   IconButton,
   CircularProgress,
-  Button,
 } from "@material-ui/core";
-import AddIcon from "@material-ui/icons/Add";
-import BookIcon from "@material-ui/icons/Book";
+import AddCircleIcon from "@material-ui/icons/Add";
+import BookCircleIcon from "@material-ui/icons/Book";
 import Router from "next/router";
 import Alert from "@material-ui/lab/Alert";
 
@@ -25,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: theme.spacing(8),
     padding: theme.spacing(2, 2),
     marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
   },
   addIcon: {
     width: "3em",
@@ -43,51 +43,49 @@ const UserMenu = () => {
     return false;
   };
 
-  if (spinnerAuth && !errorAuth)
-    return (
-      <Box className={classes.box}>
-        <CircularProgress color="primary"></CircularProgress>
-      </Box>
-    );
   if (errorAuth) {
     return <Alert severity="error">{error}</Alert>;
   }
-
-  if(user && userDB && isOwner(userDB))
-  return (
+  if (user && userDB && !spinnerAuth) {
+    if (isOwner(userDB)) {
+      return (
         <Box className={classes.box}>
           <Typography color="textPrimary" variant="h5">
             Add your restaurant to the site!
           </Typography>
-          <Button
+          <IconButton
             color="primary"
             variant="contained"
-            className={classes.addIconButton}
             onClick={() =>
               user ? Router.push("/new-restaurant") : Router.push("/signin")
             }
           >
-            <AddIcon className={classes.addIcon} />
-          </Button>
+            <AddCircleIcon className={classes.addIcon}/>
+          </IconButton>
         </Box>
-  )
-  else {
-      return(
+      );
+    } else {
+      return (
         <Box className={classes.box}>
-          <Button
+          <IconButton
             color="primary"
             variant="contained"
-            className={classes.addIconButton}
             onClick={() =>
               user ? Router.push("/reservations") : Router.push("/signin")
             }
           >
-            <BookIcon className={classes.addIcon} />
-          </Button>
+            <BookCircleIcon className={classes.addIcon}/>
+          </IconButton>
         </Box>
-      )
-}
+      );
+    }
+  }
 
+  return (
+    <Box className={classes.box}>
+      <CircularProgress color="primary"></CircularProgress>
+    </Box>
+  );
 };
 
 export default UserMenu;

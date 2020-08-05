@@ -12,8 +12,8 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import Layout from "../src/components/Layout";
-import Copyright from "../src/components/Copyright";
+import Layout from "../src/components/Layout/Layout";
+import Copyright from "../src/components/Layout/Copyright";
 import firebase, { FirebaseContext } from "../firebase";
 
 // validations
@@ -156,15 +156,7 @@ const SignUp = () => {
               )}
 
               {error && <Alert severity="error">{error} </Alert>}
-              {/* 
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={
-                    <Checkbox value="allowExtraEmails" color="primary" />
-                  }
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                />
-              </Grid> */}
+             
             </Grid>
             <Button
               type="submit"

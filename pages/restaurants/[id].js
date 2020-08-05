@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { FirebaseContext } from "../../firebase";
 import { useRouter } from "next/router";
 import Map from "../../src/components/Map";
-import Layout from "../../src/components/Layout";
+import Layout from "../../src/components/Layout/Layout";
 import {
   makeStyles,
   Box,
@@ -11,9 +11,8 @@ import {
   CircularProgress,
   Container,
 } from "@material-ui/core";
-import RestaurantMenu from "../../src/components/RestaurantMenu";
-import useAuth from "../../hooks/useAuth";
-import SwitchRestaurant from "../../src/components/SwitchRestaurant";
+import RestaurantMenu from "../../src/components/Owner/RestaurantMenu";
+import SwitchRestaurant from "../../src/components/Owner/SwitchRestaurant";
 
 const useStyles = makeStyles((theme) => ({
   box: {
@@ -70,8 +69,9 @@ const Restaurant = () => {
     city,
     zip_code,
     state,
-    creator,
+    owner,
     active,
+    menu
   } = restaurant;
   if (Object.keys(restaurant).length === 0 && !error)
     return (
@@ -81,15 +81,14 @@ const Restaurant = () => {
         </Box>
       </Layout>
     );
-
   return (
     <Layout>
       <Container>
         <Typography className={classes.titleSection} variant="h2">
           Welcome! <b> {name} </b>
         </Typography>
-        <Typography variant="p">{description}</Typography>
-        {user.uid === creator.id ? <SwitchRestaurant active={active} id={id} /> : 
+        <Typography variant="h6">{description}</Typography>
+        {user.uid === owner.id ? <SwitchRestaurant active={active} id={id} /> : 
                     <span>
                       {" "}
                       This restaurant is  { active ? <b>online </b>: <b>offline </b> } 
@@ -100,7 +99,7 @@ const Restaurant = () => {
         <Box className={classes.box}>
           <Map city={city} state={state} street_address={street_address} />
         </Box>
-        <RestaurantMenu />
+        <RestaurantMenu menu={menu} id={id}/>
       </Container>
     </Layout>
   );

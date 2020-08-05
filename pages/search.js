@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import useRestaurants from "../hooks/useRestaurants";
 import RestaurantList from "../src/components/RestaurantList";
-import Layout from "../src/components/Layout";
+import Layout from "../src/components/Layout/Layout";
 import { makeStyles, Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({

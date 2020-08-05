@@ -14,8 +14,8 @@ import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import { Avatar, Button } from "@material-ui/core";
-import { FirebaseContext } from "../../firebase";
-import Search from "./Search";
+import { FirebaseContext } from "../../../firebase";
+import Search from "../Search";
 
 const useStyles = makeStyles((theme) => ({
   grow: {

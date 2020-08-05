@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Switch, Box } from '@material-ui/core';
-import { FirebaseContext } from '../../firebase';
+import { FirebaseContext } from '../../../firebase';
 
 
 
