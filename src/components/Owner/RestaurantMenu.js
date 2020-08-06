@@ -1,5 +1,5 @@
 import React from 'react';
-import { Paper, makeStyles, TableContainer, Table, TableBody, TablePagination, TableRow, TableCell, Checkbox, Chip } from '@material-ui/core';
+import { Paper, makeStyles, TableContainer, Table, TableBody, TablePagination, TableRow, TableCell, Checkbox, Chip, Box, CircularProgress, Typography } from '@material-ui/core';
 import EnhancedTableToolbar from './EnhancedTableToolbar';
 import EnhancedTableHead from './EnhancedTableHead';
 import PropTypes from "prop-types";
@@ -86,6 +86,16 @@ const RestaurantMenu = ({menu,id}) => {
   
     const isSelected = (name) => selected.indexOf(name) !== -1;
   
+
+    
+  if ( typeof menu === 'undefined') {
+    return (
+      <Box className={classes.paper}>
+        <Typography>Menu not avai</Typography>
+      </Box>
+    );
+  }
+
     const emptyRows =
       rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
   
@@ -113,6 +123,7 @@ const RestaurantMenu = ({menu,id}) => {
         }
         return 0;
       }
+
 
     return (
       <div className={classes.root}>

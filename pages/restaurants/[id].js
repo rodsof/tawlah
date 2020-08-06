@@ -73,6 +73,7 @@ const Restaurant = () => {
     active,
     menu
   } = restaurant;
+  
   if (Object.keys(restaurant).length === 0 && !error)
     return (
       <Layout>
@@ -88,7 +89,7 @@ const Restaurant = () => {
           Welcome! <b> {name} </b>
         </Typography>
         <Typography variant="h6">{description}</Typography>
-        {user.uid === owner.id ? <SwitchRestaurant active={active} id={id} /> : 
+        { user && user.uid === owner.id ? <SwitchRestaurant active={active} id={id} /> : 
                     <span>
                       {" "}
                       This restaurant is  { active ? <b>online </b>: <b>offline </b> } 

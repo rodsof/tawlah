@@ -7,7 +7,7 @@ import firebase, { FirebaseContext } from "../firebase";
 import useAuth from "../hooks/useAuth";
 
 export default function MyApp(props) {
-  const { user } = useAuth();
+  const { user, userDB } = useAuth();
   
   const { Component, pageProps } = props;
 
@@ -25,7 +25,8 @@ export default function MyApp(props) {
         <FirebaseContext.Provider
           value={{
             firebase,
-            user
+            user,
+            userDB
           }}
         >
           <Component {...pageProps} />

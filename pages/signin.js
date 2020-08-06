@@ -10,8 +10,7 @@ import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import Layout from "../src/components/Layout";
-import Copyright from "../src/components/Copyright";
+import Layout from "../src/components/Layout/Layout";
 import firebase from "../firebase";
 import Alert from '@material-ui/lab/Alert';
 
@@ -144,9 +143,7 @@ const SignIn = () => {
 
           </form>
         </div>
-        <Box mt={8}>
-          <Copyright />
-        </Box>
+        
       </Container>
     </Layout>
   );

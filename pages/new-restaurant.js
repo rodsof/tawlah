@@ -7,7 +7,6 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Layout from "../src/components/Layout/Layout";
-import Copyright from "../src/components/Layout/Copyright";
 import { FirebaseContext } from "../firebase";
 import Alert from "@material-ui/lab/Alert";
 import FileUploader from "react-firebase-file-uploader";
@@ -18,6 +17,7 @@ import useValidation from "../hooks/useValidation";
 import validateNewRestaurant from "../validation/validateNewRestaurant";
 import { useRouter } from "next/router";
 import { Snackbar } from "@material-ui/core";
+import Lost from "../src/components/Layout/Lost";
 
 const STATE_INICIAL = {
   name: "",
@@ -26,7 +26,7 @@ const STATE_INICIAL = {
   street_address: "",
   city: "",
   state: "",
-  zip_code: ""
+  zip_code: "",
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -71,7 +71,6 @@ const SignIn = () => {
   const [error, saveError] = useState(false);
   const [open, setOpen] = useState(false);
 
- 
   const {
     values,
     errors,
@@ -94,7 +93,7 @@ const SignIn = () => {
   const router = useRouter();
 
   // context crud firebase
-  const { user, firebase } = useContext(FirebaseContext);
+  const { user, userDB, firebase } = useContext(FirebaseContext);
   /* 
   useEffect(() => {
     // code to run on component mount
@@ -108,7 +107,6 @@ const SignIn = () => {
     QRCode.toCanvas(document.getElementById("canvas"), url, function (error) {
       if (error) console.error(error);
     });
-
   };
   async function createRestaurant() {
     let url = "";
@@ -134,7 +132,7 @@ const SignIn = () => {
       city,
       state,
       zip_code,
-      active: true
+      active: true,
     };
 
     // insert into db
@@ -194,6 +192,7 @@ const SignIn = () => {
     saveGoogleMapLink(addressObject.url);
   }; */
 
+  if (Object.keys(userDB).length !== 0 && userDB.roles.owner){
   return (
     <Layout>
       <Container component="main" maxWidth="xs">
@@ -315,11 +314,15 @@ const SignIn = () => {
             {error && <Alert severity="error">{error} </Alert>}
 
             {open ? (
-              <Snackbar open={open} autoHideDuration={24000} onClose={handleClose}>
-              <Alert severity="success" >
-              <canvas id="canvas" />
-                SCAN TO GET YOUR RESTAURANT URL
-              </Alert>
+              <Snackbar
+                open={open}
+                autoHideDuration={24000}
+                onClose={handleClose}
+              >
+                <Alert severity="success">
+                  <canvas id="canvas" />
+                  SCAN TO GET YOUR RESTAURANT URL
+                </Alert>
               </Snackbar>
             ) : (
               <Button
@@ -337,6 +340,14 @@ const SignIn = () => {
       </Container>
     </Layout>
   );
+            }
+            else{
+              return (
+                <Layout>
+               <Lost />
+              </Layout>
+              )
+            }
 };
 
 export default SignIn;

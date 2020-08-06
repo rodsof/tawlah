@@ -1,13 +1,14 @@
-import { Grid, Divider, makeStyles, fade, Typography } from "@material-ui/core";
+import { Grid, Divider, makeStyles, fade, Typography, Box } from "@material-ui/core";
 import RestaurantList from "../src/components/RestaurantList";
 import AddIcon from "@material-ui/icons/Add";
 import Layout from "../src/components/Layout/Layout";
 
 import useRestaurants from "../hooks/useRestaurants";
-import UserMenu from "../src/components/UserMessage";
+import UserMessage from "../src/components/UserMessage";
 import MyRestaurants from "../src/components/Owner/MyRestaurants";
 import { FirebaseContext } from "../firebase";
 import { useContext } from "react";
+import useAuth from "../hooks/useAuth";
 
 const useStyles = makeStyles((theme) => ({
   box: {
@@ -39,8 +40,7 @@ const useStyles = makeStyles((theme) => ({
 const Index = () => {
   const classes = useStyles();
   const { restaurants, spinner, error } = useRestaurants("votes");
- const { user } = useContext(FirebaseContext);
-
+ const { user, userDB } = useContext(FirebaseContext);
  return (
     <Layout>
       <div className={classes.titleSection}>
@@ -59,9 +59,11 @@ const Index = () => {
         </Grid>
       </div>
       <Divider variant="middle" />
-      <UserMenu />
+      { user ?  
+      <UserMessage />
+      : null }
       <Divider variant="middle" />
-      { user ? 
+      { Object.keys(userDB).length !== 0 && userDB.roles.owner ? 
       <Grid container spacing={4} >
       <MyRestaurants 
        restaurants={restaurants}
@@ -69,7 +71,8 @@ const Index = () => {
        error={error}
       />
       </Grid>
-      : null }
+      : null
+      }
     </Layout>
   );
 };

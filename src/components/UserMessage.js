@@ -31,23 +31,19 @@ const useStyles = makeStyles((theme) => ({
     height: "3em",
   },
 }));
-const UserMenu = () => {
+const UserMessage = () => {
   const classes = useStyles();
 
-  const { user } = useContext(FirebaseContext);
-  const { userDB, spinnerAuth, errorAuth } = useAuth();
+  const { user, userDB } = useContext(FirebaseContext);
+  const { errorAuth } = useAuth();
 
-  const isOwner = (user) => {
-    if (userDB.roles.owner) return true;
 
-    return false;
-  };
 
   if (errorAuth) {
     return <Alert severity="error">{error}</Alert>;
   }
-  if (user && userDB && !spinnerAuth) {
-    if (isOwner(userDB)) {
+  if (user && Object.keys(userDB).length !== 0 ) {
+    if (userDB.roles.owner) {
       return (
         <Box className={classes.box}>
           <Typography color="textPrimary" variant="h5">
@@ -88,4 +84,4 @@ const UserMenu = () => {
   );
 };
 
-export default UserMenu;
+export default UserMessage;
