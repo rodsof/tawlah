@@ -11,7 +11,7 @@ export default function validateLogin(values) {
 
     // validate password
     if(!values.password) {
-        errors.password = "You have to choose a password";
+        errors.password = "You have to enter a password";
     } else if( values.password.length < 6 ) {
         errors.password = 'Password minimum length: 6 characters'
     }

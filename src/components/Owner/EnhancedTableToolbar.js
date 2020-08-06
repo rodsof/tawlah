@@ -18,6 +18,7 @@ import AddCircleIcon from "@material-ui/icons/Add";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import DeleteIcon from "@material-ui/icons/Delete";
 import AddDishForm from "./AddDishForm";
+import DeleteDishForm from "./DeleteDish";
 
 const useToolbarStyles = makeStyles((theme) => ({
   root: {
@@ -27,12 +28,12 @@ const useToolbarStyles = makeStyles((theme) => ({
   highlight:
     theme.palette.type === "light"
       ? {
-          color: theme.palette.secondary.main,
+          color: theme.palette.primary.main,
           backgroundColor: lighten(theme.palette.primary.light, 0.85),
         }
       : {
           color: theme.palette.text.primary,
-          backgroundColor: theme.palette.primary.dark,
+          backgroundColor: theme.palette.primary.main,
         },
   title: {
     flex: "1 1 100%",
@@ -46,17 +47,20 @@ const useToolbarStyles = makeStyles((theme) => ({
 
 const EnhancedTableToolbar = (props) => {
   const classes = useToolbarStyles();
-  const { numSelected } = props;
+  const { selected, handler, id, menu} = props;
   const [open, setOpen] = React.useState(false);
+  const [action, setAction] = React.useState(null);
 
-  const handleClick = () => {
-    setOpen(!open);
+  const numSelected = selected.length;
+
+  const handleClick = (action) => {
+    setOpen(true);
+    setAction(action);
+   
   };
-
 
   const handleClose = () => {
     setOpen(false);
-    //return;
   };
 
   return (
@@ -87,7 +91,9 @@ const EnhancedTableToolbar = (props) => {
 
       {numSelected > 0 ? (
         <Tooltip title="Delete">
-          <IconButton aria-label="delete">
+          <IconButton aria-label="delete"
+             onClick={() => handleClick("delete")}
+          >
             <DeleteIcon />
           </IconButton>
         </Tooltip>
@@ -98,7 +104,7 @@ const EnhancedTableToolbar = (props) => {
               color="primary"
               variant="contained"
               size="medium"
-              onClick={() => handleClick(!open)}
+              onClick={() => handleClick("add")}
             >
               <AddCircleIcon />
             </IconButton>
@@ -118,14 +124,18 @@ const EnhancedTableToolbar = (props) => {
         onClose={handleClose}
         ref={React.useRef()} 
       >
-          <AddDishForm id={props.id} menu={props.menu}/>
+        { action === "add" ? 
+          <AddDishForm id={id} menu={menu} handler={handler}/>
+          :
+       <DeleteDishForm selected={selected}  id={id} menu={menu} handler={handler} /> 
+      }
       </Modal>
     </Toolbar>
   );
 };
 
 EnhancedTableToolbar.propTypes = {
-  numSelected: PropTypes.number.isRequired,
+  selected: PropTypes.array.isRequired,
 };
 
 export default EnhancedTableToolbar;

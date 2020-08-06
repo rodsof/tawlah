@@ -5,10 +5,11 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import theme from "../src/theme";
 import firebase, { FirebaseContext } from "../firebase";
 import useAuth from "../hooks/useAuth";
-
-export default function MyApp(props) {
+// import { configureLanguage } from "../utils/language";
+import { Router } from "next/router";
+const MyApp = (props) => {
   const { user, userDB } = useAuth();
-  
+
   const { Component, pageProps } = props;
 
   React.useEffect(() => {
@@ -19,23 +20,35 @@ export default function MyApp(props) {
     }
   }, []);
   return (
-      <ThemeProvider theme={theme}>
-        {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-        <CssBaseline />
-        <FirebaseContext.Provider
-          value={{
-            firebase,
-            user,
-            userDB
-          }}
-        >
-          <Component {...pageProps} />
-        </FirebaseContext.Provider>
-      </ThemeProvider>
+    <ThemeProvider theme={theme}>
+      {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+      <CssBaseline />
+      <FirebaseContext.Provider
+        value={{
+          firebase,
+          user,
+          userDB,
+        }}
+      >
+        <Component {...pageProps} />
+      </FirebaseContext.Provider>
+    </ThemeProvider>
   );
-}
+};
+
+/*  MyApp.getInitialProps = async ({ ctx }) => {
+  const language = configureLanguage(ctx);
+
+  console.log("language:", language);
+
+  return {
+    language
+  };
+};  
+ */
 
 MyApp.propTypes = {
   Component: PropTypes.elementType.isRequired,
   pageProps: PropTypes.object.isRequired,
 };
+export default MyApp;

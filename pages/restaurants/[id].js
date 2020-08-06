@@ -44,24 +44,28 @@ const Restaurant = () => {
   } = router;
   // context firebase
   const { firebase, user } = useContext(FirebaseContext);
+
+  const getRestaurant = async () => {
+    const restaurantQuery = await firebase.db
+      .collection("restaurants")
+      .doc(id);
+    const restaurant = await restaurantQuery.get();
+    if (restaurant.exists) {
+      saveRestaurant(restaurant.data());
+      saveConsultDB(false);
+    } else {
+      saveError(true);
+      saveConsultDB(false);
+    }
+  };
+
   useEffect(() => {
     if (id && consultDB) {
-      const getRestaurant = async () => {
-        const restaurantQuery = await firebase.db
-          .collection("restaurants")
-          .doc(id);
-        const restaurant = await restaurantQuery.get();
-        if (restaurant.exists) {
-          saveRestaurant(restaurant.data());
-          saveConsultDB(false);
-        } else {
-          saveError(true);
-          saveConsultDB(false);
-        }
-      };
+     
       getRestaurant();
     }
   }, [id]);
+
   const {
     name,
     description,
@@ -71,9 +75,13 @@ const Restaurant = () => {
     state,
     owner,
     active,
-    menu
+    menu,
   } = restaurant;
-  
+
+  // handler to add, delete dishes
+  const handler = () => {
+    getRestaurant();
+  };
   if (Object.keys(restaurant).length === 0 && !error)
     return (
       <Layout>
@@ -89,18 +97,19 @@ const Restaurant = () => {
           Welcome! <b> {name} </b>
         </Typography>
         <Typography variant="h6">{description}</Typography>
-        { user && user.uid === owner.id ? <SwitchRestaurant active={active} id={id} /> : 
-                    <span>
-                      {" "}
-                      This restaurant is  { active ? <b>online </b>: <b>offline </b> } 
-                    </span>
-              
-    }
-        
+        {user && user.uid === owner.id ? (
+          <SwitchRestaurant active={active} id={id} />
+        ) : (
+          <span>
+            {" "}
+            This restaurant is {active ? <b>online </b> : <b>offline </b>}
+          </span>
+        )}
+
         <Box className={classes.box}>
           <Map city={city} state={state} street_address={street_address} />
         </Box>
-        <RestaurantMenu menu={menu} id={id}/>
+        <RestaurantMenu menu={menu} id={id} handler={handler} />
       </Container>
     </Layout>
   );

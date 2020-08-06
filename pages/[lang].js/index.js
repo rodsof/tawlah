@@ -1,14 +1,14 @@
 import { Grid, Divider, makeStyles, fade, Typography, Box } from "@material-ui/core";
-import RestaurantList from "../src/components/RestaurantList";
+import RestaurantList from "../../src/components/RestaurantList";
 import AddIcon from "@material-ui/icons/Add";
-import Layout from "../src/components/Layout/Layout";
+import Layout from "../../src/components/Layout/Layout";
 
-import useRestaurants from "../hooks/useRestaurants";
-import UserMessage from "../src/components/UserMessage";
-import MyRestaurants from "../src/components/Owner/MyRestaurants";
+import useRestaurants from "../../hooks/useRestaurants";
+import UserMessage from "../../src/components/UserMessage";
+import MyRestaurants from "../../src/components/Owner/MyRestaurants";
+import { FirebaseContext } from "../../firebase";
 import { useContext } from "react";
-import { FirebaseContext } from "../firebase";
-
+import useAuth from "../../hooks/useAuth";
 
 const useStyles = makeStyles((theme) => ({
   box: {

@@ -24,7 +24,7 @@ const STATE_INICIAL = {
   price: "",
 };
 
-const AddDishForm = ({ id, menu }) => {
+const AddDishForm = ({ id, menu, handler }) => {
   const {
     values,
     errors,
@@ -51,7 +51,7 @@ const AddDishForm = ({ id, menu }) => {
 
     // take copy of menu to add the new dish
     const newMenu = [...menu, dish];
-
+    menu = [...menu,dish]
     const userQuery = await firebase.db
       .collection("restaurants")
       .doc(id)
@@ -61,6 +61,7 @@ const AddDishForm = ({ id, menu }) => {
       .then(function (docRef) {
         saveSpinner(null);
         saveSuccess(true);
+        handler();
       })
       .catch(function (error) {
         saveSpinner(null);
@@ -72,7 +73,7 @@ const AddDishForm = ({ id, menu }) => {
     <form
       style={{
         padding: "2rem",
-        backgroundColor: "white",
+        backgroundColor: "white"
       }}
       onSubmit={handleSubmit}
       noValidate
@@ -80,7 +81,7 @@ const AddDishForm = ({ id, menu }) => {
       <Typography variant="h5">Add a dish to the menu</Typography>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
-          <label htmlFor="ingredients">Name: </label>
+          <label htmlFor="name">Name: </label>
           <TextField
             variant="outlined"
             fullWidth
@@ -105,7 +106,6 @@ const AddDishForm = ({ id, menu }) => {
             value={ingredients}
             onChange={handleChange}
             onBlur={handleBlur}
-            autoComplete="ingredients"
           />
         </Grid>
         {errors.email && <Alert severity="error">{errors.ingredients}</Alert>}
@@ -153,11 +153,15 @@ const AddDishForm = ({ id, menu }) => {
 
         {error && <Alert severity="error">{error} </Alert>}
       </Grid>
-      <Button type="submit" fullWidth variant="contained" color="primary">
-        Add {name} to the Menu
-      </Button>
+     
       {spinner ? <CircularProgress color="primary" /> : null}
-      {success ? <Alert severity="success">Dish added correctly!</Alert> : null}
+      {success ? <Alert severity="success" style={{
+        marginTop: "2rem"
+      }}>Dish added correctly!</Alert> :  <Button type="submit" fullWidth variant="contained" color="primary" style={{
+        marginTop: "2rem"
+      }}>
+        Add {name} to the Menu
+      </Button>}
     </form>
   );
 };
