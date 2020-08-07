@@ -4,7 +4,7 @@ export default function validateLogin(values) {
 
     // validate email
     if(!values.email) {
-        errors.email = "You have to register an email";
+        errors.email = "Enter your email";
     } else if( !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email) ) {
         errors.email = "Invalid email"
     }

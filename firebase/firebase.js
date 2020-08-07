@@ -36,6 +36,7 @@ class Firebase {
         owner: false,
         admin: false,
       },
+      name: user.displayName
     };
     // insert into db
     firebase.db
