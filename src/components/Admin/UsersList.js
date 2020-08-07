@@ -11,10 +11,18 @@ import {
   TableRow,
   TableBody,
   Chip,
+  makeStyles,
 } from "@material-ui/core";
 
+const useStyles = makeStyles((theme) => ({
+       chip: {
+         margin: 'auto',
+         cursor: 'pointer'
+       },
+}))
 
 const UsersList = () => {
+  const classes = useStyles();
   const { users } = useUsers("name");
   return (
     <Grid item xs={12} sm={12} md={12} style={{ marginBottom: "1rem"}}>
@@ -38,13 +46,13 @@ const UsersList = () => {
                   </TableCell>
                   <TableCell align="right">
                     {user.roles.admin ? (
-                      <Chip color="primary" label="Admin" />
-                    ) : null}
+                      <Chip color="primary" label="Admin" className={classes.chip} />
+                    ) : <Chip color="gray" label="Admin" className={classes.chip} />}
                     {user.roles.owner ? (
-                      <Chip color="primary" label="Owner" />
+                      <Chip color="primary" label="Owner" className={classes.chip}  />
                     ) : null}
                     {!user.roles.admin && !user.roles.owner ? (
-                      <Chip color="primary" label="Client" />
+                      <Chip color="primary" label="Client" className={classes.chip} />
                     ) : null}
                     
                   </TableCell>
