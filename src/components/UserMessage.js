@@ -10,6 +10,7 @@ import {
 } from "@material-ui/core";
 import AddCircleIcon from "@material-ui/icons/Add";
 import BookCircleIcon from "@material-ui/icons/Book";
+import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import Router from "next/router";
 import Alert from "@material-ui/lab/Alert";
 
@@ -53,14 +54,29 @@ const UserMessage = () => {
             color="primary"
             variant="contained"
             onClick={() =>
-              user ? Router.push("/new-restaurant") : Router.push("/signin")
+               Router.push("/new-restaurant") 
             }
           >
             <AddCircleIcon className={classes.addIcon}/>
           </IconButton>
         </Box>
       );
-    } else {
+    } else if (userDB.roles.admin) {
+      return (
+        <Box className={classes.box}>
+          <IconButton
+            color="primary"
+            variant="contained"
+            onClick={() =>
+              Router.push("/admin")
+            }
+          >
+            <SupervisorAccountIcon className={classes.addIcon}/>
+          </IconButton>
+        </Box>
+      );
+    }
+    else {
       return (
         <Box className={classes.box}>
           <IconButton

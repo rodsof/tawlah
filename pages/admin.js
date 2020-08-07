@@ -3,6 +3,8 @@ import Layout from '../src/components/Layout/Layout'
 import { FirebaseContext } from '../firebase'
 import Lost from '../src/components/Layout/Lost';
 import UsersList from '../src/components/Admin/UsersList';
+import RestaurantList from '../src/components/Admin/RestaurantList';
+import { Grid } from '@material-ui/core';
 
 const Admin = () => {
     const { user, userDB } = useContext(FirebaseContext);
@@ -15,8 +17,15 @@ const Admin = () => {
     }
     return (
     <Layout>
+        <div>
+        <Grid container style={{
+            display: "flex",
+            flexDirection: "column"
+        }}>
         <UsersList />
-        
+        <RestaurantList />
+        </Grid>
+        </div>
     </Layout>
     )
 }

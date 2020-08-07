@@ -65,15 +65,8 @@ const SignIn = () => {
     saveSpinner(true);
     try {
       await firebase.login(email, password);
-      if (Object.keys(userDB).length !== 0) {
-        saveSpinner(null);
-        console.log(userDB);
-        if (userDB.roles.admin) {
-          router.push("/admin");
-        } else {
-          router.push("/");
-        }
-      }
+
+      router.push("/");
     } catch (error) {
       console.error("Error signin in ", error.message);
       saveError(error.message);
@@ -131,15 +124,14 @@ const SignIn = () => {
 
             {error && <Alert severity="error">{error} </Alert>}
 
-            
             {spinner ? (
               <CircularProgress color="primary" />
             ) : (
               <>
-              <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
+                <FormControlLabel
+                  control={<Checkbox value="remember" color="primary" />}
+                  label="Remember me"
+                />
                 <Button
                   type="submit"
                   fullWidth

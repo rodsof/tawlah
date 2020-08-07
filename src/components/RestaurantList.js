@@ -33,16 +33,13 @@ const RestaurantList = ({restaurants, spinner, error}) => {
     )
   }
 
-  if(!spinner && !error && restaurants.length === 0){
-    return(
+  return (
+    <>
+    { error ? <Box className={classes.box}><Alert severity="error" >{error}</Alert> </Box> : null }
+    { restaurants.length === 0 ? 
       <Box className={classes.box}>
       <Typography component="h3" >Sorry, there aren't restaurants yet :(</Typography>
       </Box>
-    )
-  }
-  return (
-    <>
-    { error ? <Box className={classes.box}><Alert severity="error" >{error}</Alert> </Box>
     : <>
           {list.map((restaurant) => (
             <Grid item xs={12} md={4} key={restaurant.id}>
