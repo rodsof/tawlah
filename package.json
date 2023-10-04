@@ -13,7 +13,7 @@
     "@material-ui/lab": "^4.0.0-alpha.56",
     "firebase": "^7.17.1",
     "firebase-admin": "^11.4.1",
-    "next": "9.5.1",
+    "next": "13.5.4",
     "nookies": "^2.4.0",
     "qrcode": "^1.4.4",
     "react": "16.13.1",
